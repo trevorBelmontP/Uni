@@ -273,7 +273,7 @@ export const ShelfDetailPage: React.FC = () => {
 
         {/* Section Header */}
         <div className="bg-gray-100 px-4 py-3 flex justify-between items-center">
-          <div className="text-gray-800 font-medium">SECTION B</div>
+          <div className="text-gray-800 font-medium">SECTION</div>
           <button
             onClick={toggleSort}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
