@@ -1,6 +1,25 @@
+/**
+ * SideNavigation Component
+ * 
+ * Purpose: Provides the main navigation menu for the application
+ * - Hamburger menu on mobile devices
+ * - Expanded sidebar on desktop screens  
+ * - Navigation links to all major sections
+ * 
+ * Features:
+ * - Responsive design (collapses on mobile, expands on desktop)
+ * - Smooth slide-in/out animations
+ * - Professional dark header with user info
+ * - Clear navigation hierarchy
+ * 
+ * Props:
+ * - isOpen: Controls whether sidebar is visible
+ * - onClose: Called when user wants to close sidebar
+ */
+
 import React from "react";
-import { X, Package, Truck, ChevronDown, List } from "lucide-react";
-import { useLocation } from "wouter";
+import { X, Package, Truck, ChevronDown, List } from "lucide-react"; // Icons for navigation and actions
+import { useLocation } from "wouter"; // For programmatic navigation
 
 interface SideNavigationProps {
   isOpen: boolean;

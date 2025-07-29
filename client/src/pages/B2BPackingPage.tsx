@@ -1,12 +1,37 @@
+/**
+ * B2BPackingPage Component
+ * 
+ * Purpose: Main picking lists page - shows all available picking tasks
+ * This is the central hub where workers select which picking list to work on
+ * 
+ * Features:
+ * - Grid layout of picking cards (2x2 matrix)
+ * - Search functionality to find specific picklists by code
+ * - Advanced filter modal (SKU, Order, Payment Method, Quantity, Customers, Channel)
+ * - Sort options (A-Z, Z-A by picklist code)
+ * - "Assign to me" toggle in navigation header
+ * - Responsive design with hamburger menu
+ * 
+ * User Journey:
+ * 1. Worker sees grid of available picking lists
+ * 2. Can search/filter to find specific lists
+ * 3. Clicks on a picking list card
+ * 4. Navigates to picklist detail page
+ * 5. From there can start the picking process
+ * 
+ * Data Structure:
+ * Each picking list contains: code, items, priority, customer, fulfillment dates
+ */
+
 import React, { useState, useMemo } from "react";
-import { MenuIcon, Filter, ArrowUpDown, X, ChevronDown, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useLocation } from "wouter";
-import { SideNavigation } from "@/components/SideNavigation";
+import { MenuIcon, Filter, ArrowUpDown, X, ChevronDown, Calendar } from "lucide-react"; // Icons for UI actions
+import { Button } from "@/components/ui/button"; // Reusable button component
+import { Card, CardContent } from "@/components/ui/card"; // Card layout components
+import { Switch } from "@/components/ui/switch"; // Toggle switch component
+import { Input } from "@/components/ui/input"; // Text input component
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Dropdown components
+import { useLocation } from "wouter"; // For navigation between pages
+import { SideNavigation } from "@/components/SideNavigation"; // Navigation menu component
 
 interface PicklistItem {
   id: string;

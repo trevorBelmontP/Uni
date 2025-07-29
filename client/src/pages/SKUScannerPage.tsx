@@ -1,8 +1,31 @@
+/**
+ * SKUScannerPage Component
+ * 
+ * Purpose: Final step in picking process - scan and pick individual product barcodes
+ * This is where workers scan each product SKU and track their picking progress
+ * 
+ * Features:
+ * - Live camera feed for barcode scanning with clean interface
+ * - Tabbed interface: Pending items vs Scanned items
+ * - Product cards with detailed information (batch, expiry, cost)
+ * - Bulk picking modal for selecting quantities
+ * - Real-time status tracking (Good/Damaged conditions)
+ * - Progress tracking with automatic navigation when complete
+ * 
+ * User Journey:
+ * 1. Worker arrives after selecting shelf to pick from
+ * 2. Sees pending items that need to be picked
+ * 3. Uses camera to scan product barcodes or clicks product cards
+ * 4. Selects quantity and condition for each item
+ * 5. Items move from pending to scanned tab automatically
+ * 6. When all items complete, returns to shelf detail page
+ */
+
 import { useState, useEffect, useRef } from "react";
-import { useLocation } from "wouter";
-import { ArrowLeft, X, Trash2, Camera } from "lucide-react";
-import { CameraCapture } from "@/components/CameraCapture";
-import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter"; // For navigation between pages
+import { ArrowLeft, X, Trash2, Camera } from "lucide-react"; // Icons for UI actions
+import { CameraCapture } from "@/components/CameraCapture"; // Camera functionality component
+import { Button } from "@/components/ui/button"; // Reusable button component
 
 interface Product {
   id: string;

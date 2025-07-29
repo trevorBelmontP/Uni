@@ -87,6 +87,9 @@ This is a mobile-first picking application migrated from Figma to Replit. The ap
 - **2025-01-29**: Implemented clean camera interface - removed Delete/Add/Click buttons, added single "Click Picture" button below lens
 - **2025-01-29**: Added bin button functionality in header to clear captured photos and restore camera view
 - **2025-01-29**: Updated all scanner pages with direct photo capture from video stream without modal dialogs
+- **2025-01-29**: Created comprehensive README.md file with detailed project explanation for non-technical users
+- **2025-01-29**: Added extensive code comments throughout App.tsx, CameraCapture.tsx, ToteScannerPage.tsx, SideNavigation.tsx, and B2BPackingPage.tsx
+- **2025-01-29**: Documented routing structure, component purposes, user journeys, and technical architecture in detail
 
 ## User Preferences
 - Mobile-first design approach

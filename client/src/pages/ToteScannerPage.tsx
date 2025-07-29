@@ -1,43 +1,69 @@
+/**
+ * ToteScannerPage Component
+ * 
+ * Purpose: First step in the picking process - scan tote/container barcode
+ * This page allows workers to scan the container they'll use for picking
+ * 
+ * User Journey:
+ * 1. User arrives after clicking "Start Picking" on a picking list
+ * 2. Camera shows live feed with scanning overlay
+ * 3. User positions tote barcode in camera view
+ * 4. User clicks "Click Picture" to capture barcode image
+ * 5. After successful scan, automatically navigates to shelf detail page
+ * 
+ * Features:
+ * - Live camera feed with scanning guides
+ * - Direct photo capture without modal
+ * - Bin button to clear captured photos
+ * - Automatic navigation after scanning
+ */
+
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Trash2, Camera } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLocation, useParams } from "wouter";
-import { CameraCapture } from "@/components/CameraCapture";
+import { ArrowLeft, Trash2, Camera } from "lucide-react"; // Icons for navigation and actions
+import { Button } from "@/components/ui/button"; // Reusable button component
+import { useLocation, useParams } from "wouter"; // For navigation and getting URL parameters
+import { CameraCapture } from "@/components/CameraCapture"; // Camera functionality component
 
 export const ToteScannerPage: React.FC = () => {
+  // Get URL parameters (like the picking list ID from /tote-scanner/123)
   const params = useParams();
-  const picklistId = params.id || "PK1000";
-  const [, setLocation] = useLocation();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
-  const [scannedData, setScannedData] = useState<string>("");
-  const [cameraError, setCameraError] = useState<string>("");
-  const [showCameraCapture, setShowCameraCapture] = useState(false);
-  const [capturedImages, setCapturedImages] = useState<string[]>([]);
-  const [capturedImageData, setCapturedImageData] = useState<string | null>(null);
+  const picklistId = params.id || "PK1000"; // Default fallback ID
+  const [, setLocation] = useLocation(); // For programmatic navigation between pages
+  
+  // Camera-related state variables
+  const videoRef = useRef<HTMLVideoElement>(null); // Reference to video element for direct access
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null); // Active camera stream
+  const [scannedData, setScannedData] = useState<string>(""); // Mock barcode data after scanning
+  const [cameraError, setCameraError] = useState<string>(""); // Error messages for camera issues
+  const [showCameraCapture, setShowCameraCapture] = useState(false); // Show/hide camera modal
+  const [capturedImages, setCapturedImages] = useState<string[]>([]); // Array of captured image data
+  const [capturedImageData, setCapturedImageData] = useState<string | null>(null); // Currently displayed image
 
-  // Start camera when component mounts
+  // Start camera when component loads and cleanup when component unloads
   useEffect(() => {
-    startCamera();
+    startCamera(); // Initialize camera on page load
     return () => {
-      stopCamera();
+      stopCamera(); // Cleanup camera when leaving page
     };
   }, []);
 
+  // Function to request camera permission and start video stream
   const startCamera = async () => {
     try {
+      // Request camera access with specific settings
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: "environment", // Use back camera for barcode scanning
-          width: { ideal: 1280 },
+          facingMode: "environment", // Use back camera (better for barcode scanning)
+          width: { ideal: 1280 }, // High resolution for better barcode recognition
           height: { ideal: 720 }
         }
       });
       
+      // Connect camera stream to video element if it exists
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setCameraStream(stream);
-        setCameraError("");
+        setCameraError(""); // Clear any previous errors
       }
     } catch (error) {
       console.error("Error accessing camera:", error);
@@ -45,9 +71,10 @@ export const ToteScannerPage: React.FC = () => {
     }
   };
 
+  // Function to stop camera and release resources
   const stopCamera = () => {
     if (cameraStream) {
-      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream.getTracks().forEach(track => track.stop()); // Stop all camera tracks
       setCameraStream(null);
     }
   };

@@ -1,17 +1,34 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Camera, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+/**
+ * CameraCapture Component
+ * 
+ * Purpose: Handles all camera functionality for barcode scanning
+ * - Opens device camera and shows live video feed
+ * - Captures photos when user clicks button
+ * - Handles camera permissions and error states
+ * - Used across all scanner pages (Tote, Shelf, SKU)
+ * 
+ * How it works:
+ * 1. Requests camera permission when activated
+ * 2. Shows live video feed with scanning overlay
+ * 3. User clicks to capture photo
+ * 4. Photo replaces video feed until deleted
+ */
 
+import React, { useRef, useEffect, useState } from 'react';
+import { Camera, Trash2 } from 'lucide-react'; // Icons for camera and delete actions
+import { Button } from '@/components/ui/button'; // Reusable button component
+
+// Props interface - defines what data this component expects
 interface CameraCaptureProps {
-  onCapture?: (imageData: string) => void;
-  onClose?: () => void;
-  isActive: boolean;
-  title?: string;
-  showCapturedImage?: boolean;
-  capturedImageData?: string | null;
-  onDeleteImage?: () => void;
-  width?: number;
-  height?: number;
+  onCapture?: (imageData: string) => void; // Called when photo is captured
+  onClose?: () => void; // Called when modal/component should close
+  isActive: boolean; // Whether camera should be active
+  title?: string; // Optional title for the camera modal
+  showCapturedImage?: boolean; // Whether to show captured image
+  capturedImageData?: string | null; // Base64 data of captured image
+  onDeleteImage?: () => void; // Called when user wants to delete image
+  width?: number; // Camera width in pixels
+  height?: number; // Camera height in pixels
 }
 
 export const CameraCapture: React.FC<CameraCaptureProps> = ({
