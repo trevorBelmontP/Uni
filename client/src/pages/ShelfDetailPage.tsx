@@ -7,34 +7,36 @@ import { CameraCapture } from "@/components/CameraCapture";
 // Mock shelf data based on scanned barcode
 const mockShelfData = {
   aisle: "15",
-  section: "006", 
+  section: "006",
   level: "A",
   shelves: [
     {
       code: "SHELF_001",
       skuCount: 5,
-      pendingQty: 120
+      pendingQty: 120,
     },
     {
-      code: "SHELF_002", 
+      code: "SHELF_002",
       skuCount: 3,
-      pendingQty: 80
-    }
-  ]
+      pendingQty: 80,
+    },
+  ],
 };
 
 export const ShelfDetailPage: React.FC = () => {
   const params = useParams();
   const picklistId = params.id || "PK1000";
   const [, setLocation] = useLocation();
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [cameraError, setCameraError] = useState<string>("");
   const [showBarcodeData, setShowBarcodeData] = useState(false);
   const [showCameraCapture, setShowCameraCapture] = useState(false);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
-  const [capturedImageData, setCapturedImageData] = useState<string | null>(null);
+  const [capturedImageData, setCapturedImageData] = useState<string | null>(
+    null,
+  );
 
   // Start camera when component mounts
   useEffect(() => {
@@ -50,10 +52,10 @@ export const ShelfDetailPage: React.FC = () => {
         video: {
           facingMode: "environment", // Use back camera for barcode scanning
           width: { ideal: 1280 },
-          height: { ideal: 720 }
-        }
+          height: { ideal: 720 },
+        },
       });
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setCameraStream(stream);
@@ -61,13 +63,15 @@ export const ShelfDetailPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error accessing camera:", error);
-      setCameraError("Camera access denied. Please allow camera permissions and refresh.");
+      setCameraError(
+        "Camera access denied. Please allow camera permissions and refresh.",
+      );
     }
   };
 
   const stopCamera = () => {
     if (cameraStream) {
-      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream.getTracks().forEach((track) => track.stop());
       setCameraStream(null);
     }
   };
@@ -85,14 +89,14 @@ export const ShelfDetailPage: React.FC = () => {
   const handleScanShelf = () => {
     // Capture photo directly from video stream
     if (videoRef.current && !capturedImageData) {
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       const video = videoRef.current;
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.drawImage(video, 0, 0);
-        const imageData = canvas.toDataURL('image/jpeg', 0.8);
+        const imageData = canvas.toDataURL("image/jpeg", 0.8);
         handleCameraCapture(imageData);
       }
     }
@@ -101,12 +105,12 @@ export const ShelfDetailPage: React.FC = () => {
   const handleCameraCapture = (imageData: string) => {
     console.log("Shelf photo captured");
     setCapturedImageData(imageData);
-    setCapturedImages(prev => [...prev, imageData]);
+    setCapturedImages((prev) => [...prev, imageData]);
     setShowBarcodeData(true);
   };
 
   const handleDeleteImage = (index: number) => {
-    setCapturedImages(prev => prev.filter((_, i) => i !== index));
+    setCapturedImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleAddImage = () => {
@@ -124,11 +128,11 @@ export const ShelfDetailPage: React.FC = () => {
   };
 
   const toggleSort = () => {
-    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
 
   const sortedShelves = [...mockShelfData.shelves].sort((a, b) => {
-    if (sortOrder === 'asc') {
+    if (sortOrder === "asc") {
       return a.code.localeCompare(b.code);
     } else {
       return b.code.localeCompare(a.code);
@@ -141,7 +145,7 @@ export const ShelfDetailPage: React.FC = () => {
         {/* Header */}
         <header className="flex h-12 items-center justify-between w-full bg-white border-b border-[#e0e0e0] px-4">
           <div className="flex items-center gap-3">
-            <button 
+            <button
               className="flex items-center justify-center w-8 h-8 hover:bg-gray-100 rounded transition-colors duration-200"
               onClick={handleBack}
             >
@@ -151,9 +155,9 @@ export const ShelfDetailPage: React.FC = () => {
               TOTE_01
             </h1>
           </div>
-          
-          <Button 
-            variant="ghost" 
+
+          <Button
+            variant="ghost"
             className="text-gray-600 hover:text-gray-800 font-medium"
             onClick={handleClose}
           >
@@ -164,9 +168,9 @@ export const ShelfDetailPage: React.FC = () => {
         {/* Scan SHELF Section */}
         <div className="bg-gray-800 flex flex-col items-center justify-center relative h-64">
           {/* Scan SHELF Title */}
-          <div className="absolute top-6 left-0 right-0 flex items-center justify-center">
+          <div className="absolute top-1 left-0 right-0 flex items-center justify-center">
             <h2 className="text-white text-lg font-medium">Scan SHELF</h2>
-            <button 
+            <button
               className="absolute right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
               onClick={() => {
                 setCapturedImageData(null);
@@ -200,12 +204,12 @@ export const ShelfDetailPage: React.FC = () => {
                     <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white rounded-tr-lg"></div>
                     <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white rounded-bl-lg"></div>
                     <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white rounded-br-lg"></div>
-                    
+
                     {/* Scanning line animation */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg"></div>
                     </div>
-                    
+
                     {/* Center instruction */}
                     {!cameraError && !showBarcodeData && (
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -223,7 +227,7 @@ export const ShelfDetailPage: React.FC = () => {
                   className="w-full h-full object-cover rounded-2xl"
                 />
               )}
-              
+
               {/* Camera Error Fallback */}
               {cameraError && !capturedImageData && (
                 <div className="absolute inset-0 bg-gray-800 flex items-center justify-center rounded-2xl">
@@ -247,55 +251,22 @@ export const ShelfDetailPage: React.FC = () => {
           </div>
 
           {/* Barcode Data Display (shows after scanning) */}
-          {showBarcodeData && (
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="bg-white rounded-lg p-3">
-                <div className="flex justify-center mb-2">
-                  {/* Barcode lines */}
-                  <div className="flex items-end gap-px">
-                    {Array.from({length: 30}, (_, i) => (
-                      <div 
-                        key={i}
-                        className="bg-black"
-                        style={{
-                          width: Math.random() > 0.5 ? '2px' : '1px',
-                          height: `${15 + Math.random() * 15}px`
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Location Info */}
-                <div className="flex justify-between items-center text-center">
-                  <div className="flex-1">
-                    <div className="text-black text-xl font-bold">{mockShelfData.aisle}</div>
-                    <div className="text-gray-600 text-xs">AISLE</div>
-                    <div className="text-sm">↓</div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-black text-xl font-bold">{mockShelfData.section}</div>
-                    <div className="text-gray-600 text-xs">SECTION</div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-black text-xl font-bold">{mockShelfData.level}</div>
-                    <div className="text-gray-600 text-xs">LEVEL</div>
-                    <div className="text-sm">↓</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Tabs Section */}
         <div className="bg-white border-b border-gray-200">
           <div className="flex">
             <button className="flex-1 py-3 px-4 text-blue-600 border-b-2 border-blue-600 font-medium">
-              Pending Shelf <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs ml-1">2</span>
+              Pending Shelf{" "}
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs ml-1">
+                2
+              </span>
             </button>
             <button className="flex-1 py-3 px-4 text-gray-500 font-medium">
-              Scanned Shelf <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs ml-1">0</span>
+              Scanned Shelf{" "}
+              <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs ml-1">
+                0
+              </span>
             </button>
           </div>
         </div>
@@ -303,79 +274,24 @@ export const ShelfDetailPage: React.FC = () => {
         {/* Section Header */}
         <div className="bg-gray-100 px-4 py-3 flex justify-between items-center">
           <div className="text-gray-800 font-medium">SECTION B</div>
-          <button 
+          <button
             onClick={toggleSort}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
           >
             <span className="text-sm">Shelf Code</span>
-            <span className="text-lg">{sortOrder === 'asc' ? 'A↑' : 'Z↓'}</span>
+            <span className="text-lg">{sortOrder === "asc" ? "A↑" : "Z↓"}</span>
           </button>
         </div>
 
         {/* Captured Images */}
-        {capturedImages.length > 0 && (
-          <div className="bg-white p-4 border-b border-gray-200">
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-sm font-medium">Captured Images ({capturedImages.length})</h3>
-              </div>
-              <div className="flex gap-2 overflow-x-auto">
-                {capturedImages.map((image, index) => (
-                  <div key={index} className="relative flex-shrink-0">
-                    <img 
-                      src={image} 
-                      alt={`Captured ${index + 1}`}
-                      className="w-16 h-16 object-cover rounded border"
-                    />
-                    <button
-                      onClick={() => handleDeleteImage(index)}
-                      className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Action Buttons */}
-        <div className="bg-white p-4 border-b border-gray-200">
-          <div className="flex gap-3">
-            <Button
-              onClick={() => handleDeleteImage(capturedImages.length - 1)}
-              disabled={capturedImages.length === 0}
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-              size="sm"
-            >
-              <Trash2 className="w-4 h-4 mr-1" />
-              Delete
-            </Button>
-            <Button
-              onClick={handleAddImage}
-              className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
-              size="sm"
-            >
-              <Camera className="w-4 h-4 mr-1" />
-              Add
-            </Button>
-            <Button
-              onClick={handleClickCapture}
-              className="flex-1 bg-green-500 hover:bg-green-600 text-white"
-              size="sm"
-            >
-              <Camera className="w-4 h-4 mr-1" />
-              Click
-            </Button>
-          </div>
-        </div>
 
         {/* Shelf List */}
         <div className="flex-1 overflow-y-auto">
           {sortedShelves.map((shelf, index) => (
-            <button 
-              key={shelf.code} 
+            <button
+              key={shelf.code}
               className="w-full bg-white border-b border-gray-200 p-4 hover:bg-gray-50 transition-colors text-left"
               onClick={() => handleShelfClick(shelf.code)}
             >
@@ -385,12 +301,17 @@ export const ShelfDetailPage: React.FC = () => {
                     {shelf.code}
                   </div>
                   <div className="text-gray-500 text-sm">
-                    SKU Count <span className="font-semibold text-gray-700">{shelf.skuCount}</span>
+                    SKU Count{" "}
+                    <span className="font-semibold text-gray-700">
+                      {shelf.skuCount}
+                    </span>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-gray-500 text-sm mb-1">Pending Qty</div>
-                  <div className="text-lg font-bold text-gray-900">{shelf.pendingQty}</div>
+                  <div className="text-lg font-bold text-gray-900">
+                    {shelf.pendingQty}
+                  </div>
                 </div>
               </div>
             </button>
