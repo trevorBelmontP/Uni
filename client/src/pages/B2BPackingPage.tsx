@@ -173,47 +173,47 @@ export const B2BPackingPage: React.FC = () => {
       <SideNavigation isOpen={isSideNavOpen} onClose={handleCloseSideNav} />
       
       {/* Main content area with responsive padding for desktop sidebar */}
-      <div className="bg-white-100 w-full max-w-md mx-auto min-h-screen relative lg:max-w-none lg:flex-1 lg:ml-0">
+      <div className="bg-white-100 w-full min-h-screen relative container-responsive">
         {/* Header - Same as landing page */}
         <header className="flex flex-col w-full items-start gap-4 sticky top-0 bg-transparent z-10">
-          <div className="flex h-12 items-center relative self-stretch w-full bg-white-100 border-b [border-bottom-style:solid] border-[#e0e0e0]">
+          <div className="flex items-center relative self-stretch w-full bg-white-100 border-b [border-bottom-style:solid] border-[#e0e0e0] header-responsive">
             <button 
-              className="relative w-12 h-12 flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 lg:hidden"
+              className="relative w-12 h-12 flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 sm:w-14 sm:h-14 lg:hidden"
               onClick={handleMenuClick}
             >
-              <MenuIcon className="h-6 w-6 text-text-elementsprimary" />
+              <MenuIcon className="h-6 w-6 text-text-elementsprimary sm:h-7 sm:w-7" />
             </button>
 
             <div className="flex items-center gap-8 relative flex-1 grow">
-              <h1 className="relative w-fit mt-[-1.00px] font-PAGE-TITLE font-[number:var(--PAGE-TITLE-font-weight)] text-text-elementsprimary text-[length:var(--PAGE-TITLE-font-size)] tracking-[var(--PAGE-TITLE-letter-spacing)] leading-[var(--PAGE-TITLE-line-height)] whitespace-nowrap [font-style:var(--PAGE-TITLE-font-style)]">
+              <h1 className="relative w-fit mt-[-1.00px] font-PAGE-TITLE font-[number:var(--PAGE-TITLE-font-weight)] text-text-elementsprimary text-[length:var(--PAGE-TITLE-font-size)] tracking-[var(--PAGE-TITLE-letter-spacing)] leading-[var(--PAGE-TITLE-line-height)] whitespace-nowrap [font-style:var(--PAGE-TITLE-font-style)] sm:text-xl lg:text-2xl">
                 PICKLISTS
               </h1>
             </div>
 
             {/* Assign to Me Button in Navbar */}
-            <div className="flex items-center gap-2 pr-4">
-              <span className="text-xs text-text-elementsprimary">Assign to me</span>
+            <div className="flex items-center gap-2 pr-4 sm:gap-3 sm:pr-6 lg:pr-8">
+              <span className="text-xs text-text-elementsprimary sm:text-sm lg:text-base whitespace-nowrap">Assign to me</span>
               <Switch
                 checked={assignToMe}
                 onCheckedChange={setAssignToMe}
-                className="scale-75"
+                className="scale-75 sm:scale-90 lg:scale-100"
               />
             </div>
           </div>
         </header>
 
         {/* Filter Section - Below Navbar */}
-        <div className="absolute top-12 left-0 right-0 p-4 bg-white-100 border-b border-greysbordere-0e-0e-0 lg:px-8">
+        <div className="absolute left-0 right-0 bg-white-100 border-b border-greysbordere-0e-0e-0 content-responsive" style={{ top: 'var(--header-height, 3rem)' }}>
           <div className="flex items-center gap-3">
             {/* Filter Button */}
             <Button
               variant="outline"
-              size="sm"
+              size="sm" 
               onClick={handleFilter}
-              className="flex items-center gap-1 border-greysbordere-0e-0e-0"
+              className="flex items-center gap-1 border-greysbordere-0e-0e-0 sm:px-4 sm:py-2 lg:px-6 lg:py-3"
             >
-              <Filter className="h-4 w-4" />
-              Filter
+              <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="sm:text-base">Filter</span>
             </Button>
 
             {/* Picklist Code Input */}
@@ -222,7 +222,7 @@ export const B2BPackingPage: React.FC = () => {
                 placeholder="Picklist Code"
                 value={picklistCode}
                 onChange={(e) => setPicklistCode(e.target.value)}
-                className="h-8 text-sm"
+                className="h-8 text-sm sm:h-10 sm:text-base lg:h-12 lg:text-lg"
               />
             </div>
 
@@ -231,34 +231,34 @@ export const B2BPackingPage: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={handleSort}
-              className="flex items-center gap-1 border-greysbordere-0e-0e-0"
+              className="flex items-center gap-1 border-greysbordere-0e-0e-0 sm:px-4 sm:py-2 lg:px-6 lg:py-3"
             >
-              <ArrowUpDown className="h-4 w-4" />
-              {sortOrder === "asc" ? "A-Z" : "Z-A"}
+              <ArrowUpDown className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="sm:text-base">{sortOrder === "asc" ? "A-Z" : "Z-A"}</span>
             </Button>
           </div>
         </div>
 
         {/* Picklist Items Grid */}
-        <div className="absolute top-[120px] left-0 right-0 bottom-0 overflow-y-auto">
-          <div className="p-4">
-            <div className="grid grid-cols-1 gap-4">
+        <div className="absolute left-0 right-0 bottom-0 overflow-y-auto" style={{ top: 'var(--content-top, 7.5rem)' }}>
+          <div className="content-responsive">
+            <div className="grid-responsive">
               {filteredAndSortedItems.map((item) => (
                 <Card 
                   key={item.id} 
-                  className="border border-greysbordere-0e-0e-0 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                  className="border border-greysbordere-0e-0e-0 cursor-pointer hover:shadow-md transition-shadow duration-200 sm:hover:shadow-lg lg:hover:shadow-xl"
                   onClick={() => setLocation(`/picklist/${item.picklistCode}`)}
                 >
-                  <CardContent className="p-4">
+                  <CardContent className="p-4 sm:p-6 lg:p-8">
                     {/* Title Section */}
-                    <div className="mb-3">
-                      <h3 className="font-medium text-text-elementsprimary font-['Roboto',Helvetica] text-left">
+                    <div className="mb-3 sm:mb-4 lg:mb-6">
+                      <h3 className="font-medium text-text-elementsprimary font-['Roboto',Helvetica] text-left sm:text-lg lg:text-xl">
                         {item.picklistCode}
                       </h3>
                     </div>
                     
                     {/* 2x2 Content Grid */}
-                    <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="grid grid-cols-2 gap-3 text-sm sm:gap-4 sm:text-base lg:gap-6 lg:text-lg">
                       {/* Top Left - Pending Quantity */}
                       <div className="flex flex-col">
                         <span className="text-text-elementssecondary opacity-80">Pending Quantity</span>
@@ -280,7 +280,7 @@ export const B2BPackingPage: React.FC = () => {
                       {/* Bottom Right - Customer */}
                       <div className="flex flex-col">
                         <span className="text-text-elementssecondary opacity-80">Customer</span>
-                        <span className="text-text-elementsprimary font-light">{item.customer}</span>
+                        <span className="text-text-elementsprimary font-light truncate">{item.customer}</span>
                       </div>
                     </div>
                   </CardContent>
@@ -292,26 +292,26 @@ export const B2BPackingPage: React.FC = () => {
 
         {/* Filter Modal */}
         {isFilterModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 sm:p-6 lg:p-8">
+            <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto sm:max-w-lg lg:max-w-xl">
               {/* Header */}
-              <div className="flex justify-between items-center p-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">FILTERS</h2>
+              <div className="flex justify-between items-center p-4 border-b border-gray-200 sm:p-6 lg:p-8">
+                <h2 className="text-lg font-semibold text-gray-900 sm:text-xl lg:text-2xl">FILTERS</h2>
                 <button 
                   onClick={() => setIsFilterModalOpen(false)}
-                  className="p-1 hover:bg-gray-100 rounded"
+                  className="p-1 hover:bg-gray-100 rounded sm:p-2"
                 >
-                  <X className="w-5 h-5 text-gray-600" />
+                  <X className="w-5 h-5 text-gray-600 sm:w-6 sm:h-6" />
                 </button>
               </div>
 
               {/* Filter Form */}
-              <div className="p-4 space-y-6">
+              <div className="p-4 space-y-6 sm:p-6 sm:space-y-8 lg:p-8 lg:space-y-10">
                 {/* SKU */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">SKU</label>
+                  <label className="text-sm font-medium text-gray-700 sm:text-base lg:text-lg">SKU</label>
                   <Select value={filters.sku} onValueChange={(value) => setFilters(prev => ({...prev, sku: value}))}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full sm:h-12 lg:h-14">
                       <SelectValue placeholder="SK001, SK002, SK003" />
                     </SelectTrigger>
                     <SelectContent>
@@ -327,23 +327,23 @@ export const B2BPackingPage: React.FC = () => {
 
                 {/* Fulfilment TAT */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Fulfilment TAT</label>
+                  <label className="text-sm font-medium text-gray-700 sm:text-base lg:text-lg">Fulfilment TAT</label>
                   <div className="relative">
                     <Input
                       value={filters.fulfillmentTAT}
                       onChange={(e) => setFilters(prev => ({...prev, fulfillmentTAT: e.target.value}))}
                       placeholder="18/02/2023 - 18/02/2023"
-                      className="pr-10"
+                      className="pr-10 sm:h-12 lg:h-14"
                     />
-                    <Calendar className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2" />
+                    <Calendar className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 sm:w-5 sm:h-5" />
                   </div>
                 </div>
 
                 {/* Order */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Order</label>
+                  <label className="text-sm font-medium text-gray-700 sm:text-base lg:text-lg">Order</label>
                   <Select value={filters.order} onValueChange={(value) => setFilters(prev => ({...prev, order: value}))}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full sm:h-12 lg:h-14">
                       <SelectValue placeholder="Hint text" />
                     </SelectTrigger>
                     <SelectContent>
@@ -359,9 +359,9 @@ export const B2BPackingPage: React.FC = () => {
 
                 {/* Payment Method */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Payment Method</label>
+                  <label className="text-sm font-medium text-gray-700 sm:text-base lg:text-lg">Payment Method</label>
                   <Select value={filters.paymentMethod} onValueChange={(value) => setFilters(prev => ({...prev, paymentMethod: value}))}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full sm:h-12 lg:h-14">
                       <SelectValue placeholder="Hint text" />
                     </SelectTrigger>
                     <SelectContent>
@@ -376,9 +376,9 @@ export const B2BPackingPage: React.FC = () => {
 
                 {/* Quantity */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Quantity</label>
+                  <label className="text-sm font-medium text-gray-700 sm:text-base lg:text-lg">Quantity</label>
                   <Select value={filters.quantity} onValueChange={(value) => setFilters(prev => ({...prev, quantity: value}))}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full sm:h-12 lg:h-14">
                       <SelectValue placeholder="Hint text" />
                     </SelectTrigger>
                     <SelectContent>
@@ -391,9 +391,9 @@ export const B2BPackingPage: React.FC = () => {
 
                 {/* Customers */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Customers</label>
+                  <label className="text-sm font-medium text-gray-700 sm:text-base lg:text-lg">Customers</label>
                   <Select value={filters.customers} onValueChange={(value) => setFilters(prev => ({...prev, customers: value}))}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full sm:h-12 lg:h-14">
                       <SelectValue placeholder="Hint Text" />
                     </SelectTrigger>
                     <SelectContent>
@@ -409,9 +409,9 @@ export const B2BPackingPage: React.FC = () => {
 
                 {/* Channel */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Channel</label>
+                  <label className="text-sm font-medium text-gray-700 sm:text-base lg:text-lg">Channel</label>
                   <Select value={filters.channel} onValueChange={(value) => setFilters(prev => ({...prev, channel: value}))}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full sm:h-12 lg:h-14">
                       <SelectValue placeholder="Hint Text" />
                     </SelectTrigger>
                     <SelectContent>
@@ -424,17 +424,17 @@ export const B2BPackingPage: React.FC = () => {
               </div>
 
               {/* Footer Buttons */}
-              <div className="flex justify-between items-center p-4 border-t border-gray-200">
+              <div className="flex justify-between items-center p-4 border-t border-gray-200 sm:p-6 lg:p-8">
                 <Button
                   variant="ghost"
                   onClick={handleClearAllFilters}
-                  className="text-gray-600 hover:text-gray-800"
+                  className="text-gray-600 hover:text-gray-800 sm:px-6 sm:py-3 lg:px-8 lg:py-4"
                 >
                   CLEAR ALL
                 </Button>
                 <Button
                   onClick={handleApplyFilters}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 sm:px-8 sm:py-3 lg:px-10 lg:py-4"
                 >
                   APPLY
                 </Button>

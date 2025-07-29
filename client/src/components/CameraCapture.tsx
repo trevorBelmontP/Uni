@@ -139,7 +139,12 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
             src={capturedImageData}
             alt="Captured"
             className="w-full h-full object-cover"
-          />
+          style={{ 
+            width: `${width}px`, 
+            height: `${height}px`,
+            maxWidth: '90vw',
+            aspectRatio: `${width}/${height}`
+          }}
         ) : (
           // Show camera feed or error
           <>
@@ -157,9 +162,9 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               </div>
             ) : (
               <video
-                ref={videoRef}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs sm:px-3 sm:py-2 sm:text-sm"
                 autoPlay
-                playsInline
+                    <Camera className="w-4 h-4 text-white animate-pulse sm:w-5 sm:h-5" />
                 muted
                 className="w-full h-full object-cover"
               />
@@ -168,16 +173,16 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
             {/* Scanning overlay */}
             <div className="absolute inset-0 border-2 border-dashed border-white/50 flex items-center justify-center">
               {isCapturing && (
-                <div className="bg-white/20 rounded-full p-2">
+        <div className="flex gap-2 mt-4 sm:gap-3 sm:mt-6">
                   <Camera className="w-4 h-4 text-white animate-pulse" />
                 </div>
               )}
             </div>
           </>
-        )}
-      </div>
+                size="sm" 
+                className="flex items-center gap-1 sm:px-4 sm:py-2"
 
-      {/* Action buttons */}
+                <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
       <div className="flex gap-2 mt-4">
         {showCapturedImage && capturedImageData ? (
           <>
@@ -186,7 +191,8 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               variant="destructive"
               size="sm"
               className="flex items-center gap-1"
-            >
+                size="sm"
+                className="sm:px-4 sm:py-2"
               <Trash2 className="w-4 h-4" />
               Delete
             </Button>
@@ -195,9 +201,9 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
                 if (onDeleteImage) onDeleteImage();
                 startCamera();
               }}
-              variant="outline"
+              className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 sm:px-6 sm:py-3 sm:text-base"
               size="sm"
-            >
+              <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
               Add
             </Button>
           </>

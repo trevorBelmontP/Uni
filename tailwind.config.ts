@@ -6,6 +6,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '375px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+        '3xl': '1920px',
+      },
       colors: {
         "buttone3-e4": "var(--buttone3-e4)",
         coloursprimaryblue: "var(--coloursprimaryblue)",
@@ -48,6 +57,11 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem',
       },
       fontFamily: {
         "PAGE-TITLE": "var(--PAGE-TITLE-font-family)",

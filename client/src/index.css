@@ -15,6 +15,45 @@
   animation: slide-up 0.3s ease-out;
 }
 
+/* Responsive container utilities */
+@layer components {
+  .container-responsive {
+    @apply w-full max-w-md mx-auto;
+    @apply lg:max-w-none lg:flex-1;
+  }
+  
+  .header-responsive {
+    @apply h-12 px-4;
+    @apply sm:h-14 sm:px-6;
+    @apply lg:h-16 lg:px-8;
+  }
+  
+  .content-responsive {
+    @apply px-4 py-4;
+    @apply sm:px-6 sm:py-6;
+    @apply lg:px-8 lg:py-8;
+  }
+  
+  .grid-responsive {
+    @apply grid grid-cols-1 gap-4;
+    @apply sm:grid-cols-2 sm:gap-6;
+    @apply lg:grid-cols-3 lg:gap-8;
+    @apply xl:grid-cols-4;
+  }
+  
+  .text-responsive {
+    @apply text-sm;
+    @apply sm:text-base;
+    @apply lg:text-lg;
+  }
+  
+  .camera-responsive {
+    @apply w-64 h-32;
+    @apply sm:w-80 sm:h-40;
+    @apply lg:w-96 lg:h-48;
+  }
+}
+
 @layer components {
   .all-\[unset\] {
     all: unset;

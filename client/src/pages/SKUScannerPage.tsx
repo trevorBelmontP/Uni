@@ -441,40 +441,40 @@ export function SKUScannerPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+      <div className="bg-white border-b border-gray-200 flex items-center justify-between header-responsive">
         <div className="flex items-center gap-3">
-          <button onClick={handleBack} className="p-1">
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
+          <button onClick={handleBack} className="p-1 sm:p-2">
+            <ArrowLeft className="w-5 h-5 text-gray-600 sm:w-6 sm:h-6" />
           </button>
-          <h1 className="text-lg font-semibold text-gray-900">TOTE_01</h1>
+          <h1 className="text-lg font-semibold text-gray-900 sm:text-xl lg:text-2xl">TOTE_01</h1>
         </div>
         <button 
           onClick={handleClose}
-          className="px-3 py-1 text-sm font-medium text-gray-600 bg-gray-100 rounded"
+          className="px-3 py-1 text-sm font-medium text-gray-600 bg-gray-100 rounded sm:px-4 sm:py-2 sm:text-base lg:px-6 lg:py-3 lg:text-lg"
         >
           CLOSE
         </button>
       </div>
 
       {/* Scanner Section */}
-      <div className="bg-black text-white p-4">
+      <div className="bg-black text-white content-responsive">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium">Scan SKU Code</h2>
+          <h2 className="text-lg font-medium sm:text-xl lg:text-2xl">Scan SKU Code</h2>
           <button
             onClick={handleDeleteImage}
-            className="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            className="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors sm:w-10 sm:h-10 lg:w-12 lg:h-12"
           >
-            <Trash2 className="w-4 h-4 text-gray-600" />
+            <Trash2 className="w-4 h-4 text-gray-600 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
           </button>
         </div>
 
 
         
         {/* Camera Scanner */}
-        <div className="bg-gray-800 rounded-lg p-4 mb-4">
+        <div className="bg-gray-800 rounded-lg p-4 mb-4 sm:p-6 lg:p-8">
           <div className="flex flex-col items-center">
             {/* Camera Lens with captured image overlay */}
-            <div className="relative w-80 h-40 rounded-lg overflow-hidden mb-4">
+            <div className="relative camera-responsive rounded-lg overflow-hidden mb-4">
               {!capturedImageData ? (
                 <>
                   <video
@@ -487,20 +487,20 @@ export function SKUScannerPage() {
                   {/* Scanning Frame Overlay */}
                   <div className="absolute inset-0 border-2 border-white border-opacity-60 rounded-lg">
                     {/* Corner brackets */}
-                    <div className="absolute top-1 left-1 w-6 h-6 border-t-2 border-l-2 border-white"></div>
-                    <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white"></div>
-                    <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white"></div>
-                    <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white"></div>
+                    <div className="absolute top-1 left-1 w-6 h-6 border-t-2 border-l-2 border-white sm:w-8 sm:h-8 lg:w-10 lg:h-10"></div>
+                    <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white sm:w-8 sm:h-8 lg:w-10 lg:h-10"></div>
+                    <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white sm:w-8 sm:h-8 lg:w-10 lg:h-10"></div>
+                    <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white sm:w-8 sm:h-8 lg:w-10 lg:h-10"></div>
                     
                     {/* Scanning line animation */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg"></div>
+                      <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg sm:h-1 lg:h-1.5"></div>
                     </div>
                     
                     {/* Center instruction */}
                     {!cameraError && (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm">
+                        <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm sm:text-sm sm:px-4 sm:py-2 lg:text-base lg:px-6 lg:py-3">
                           Position SKU barcode here
                         </div>
                       </div>
@@ -518,7 +518,7 @@ export function SKUScannerPage() {
               {/* Camera Error Fallback */}
               {cameraError && !capturedImageData && (
                 <div className="absolute inset-0 bg-gray-700 flex items-center justify-center rounded-lg">
-                  <div className="text-white text-xs text-center px-3">
+                  <div className="text-white text-xs text-center px-3 sm:text-sm lg:text-base">
                     {cameraError}
                   </div>
                 </div>
@@ -529,9 +529,9 @@ export function SKUScannerPage() {
             {!capturedImageData && (
               <Button
                 onClick={handleClickCapture}
-                className="bg-white text-black hover:bg-gray-100 border border-gray-300 px-6 py-2 rounded-full font-medium"
+                className="bg-white text-black hover:bg-gray-100 border border-gray-300 px-6 py-2 rounded-full font-medium sm:px-8 sm:py-3 sm:text-lg lg:px-10 lg:py-4 lg:text-xl"
               >
-                <Camera className="w-4 h-4 mr-2" />
+                <Camera className="w-4 h-4 mr-2 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                 Click Picture
               </Button>
             )}
@@ -544,7 +544,7 @@ export function SKUScannerPage() {
         <div className="flex">
           <button
             onClick={() => setActiveTab("pending")}
-            className={`flex-1 px-4 py-3 text-sm font-medium border-b-2 ${
+            className={`flex-1 px-4 py-3 text-sm font-medium border-b-2 sm:px-6 sm:py-4 sm:text-base lg:px-8 lg:py-5 lg:text-lg ${
               activeTab === "pending"
                 ? "text-blue-600 border-blue-600"
                 : "text-gray-500 border-transparent"
@@ -554,7 +554,7 @@ export function SKUScannerPage() {
           </button>
           <button
             onClick={() => setActiveTab("scanned")}
-            className={`flex-1 px-4 py-3 text-sm font-medium border-b-2 ${
+            className={`flex-1 px-4 py-3 text-sm font-medium border-b-2 sm:px-6 sm:py-4 sm:text-base lg:px-8 lg:py-5 lg:text-lg ${
               activeTab === "scanned"
                 ? "text-blue-600 border-blue-600"
                 : "text-gray-500 border-transparent"
@@ -566,7 +566,7 @@ export function SKUScannerPage() {
       </div>
 
       {/* Product List */}
-      <div className="p-4 pb-20">
+      <div className="pb-20 content-responsive">
         {currentProducts.length > 0 ? (
           <div className="space-y-3">
             {currentProducts.map((product) => (
@@ -575,7 +575,7 @@ export function SKUScannerPage() {
           </div>
         ) : (
           <div className="text-center py-8">
-            <p className="text-gray-500">
+            <p className="text-gray-500 sm:text-lg lg:text-xl">
               {activeTab === "pending" ? "No pending items" : "No scanned items yet"}
             </p>
           </div>
