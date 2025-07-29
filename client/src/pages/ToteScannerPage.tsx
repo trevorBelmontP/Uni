@@ -14,6 +14,7 @@ export const ToteScannerPage: React.FC = () => {
   const [cameraError, setCameraError] = useState<string>("");
   const [showCameraCapture, setShowCameraCapture] = useState(false);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
+  const [capturedImageData, setCapturedImageData] = useState<string | null>(null);
 
   // Start camera when component mounts
   useEffect(() => {
@@ -67,8 +68,8 @@ export const ToteScannerPage: React.FC = () => {
 
   const handleCameraCapture = (imageData: string) => {
     console.log("Tote photo captured");
+    setCapturedImageData(imageData);
     setCapturedImages(prev => [...prev, imageData]);
-    setShowCameraCapture(false);
     
     // Mock barcode data for now
     const mockBarcodeData = "TOTE_001_12345";
@@ -82,8 +83,9 @@ export const ToteScannerPage: React.FC = () => {
     }, 1000);
   };
 
-  const handleDeleteImage = (index: number) => {
-    setCapturedImages(prev => prev.filter((_, i) => i !== index));
+  const handleDeleteImage = () => {
+    setCapturedImageData(null);
+    setCapturedImages([]);
   };
 
   const handleAddImage = () => {
@@ -130,50 +132,17 @@ export const ToteScannerPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Camera Viewfinder */}
+            {/* Camera Scanner Area */}
             <div className="relative flex items-center justify-center">
-              {/* Camera Video Stream */}
-              <div className="relative w-64 h-32 rounded-2xl overflow-hidden">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover"
-                />
-                
-                {/* Scanning Frame Overlay */}
-                <div className="absolute inset-0 border-2 border-white border-opacity-60 rounded-2xl">
-                  {/* Corner brackets */}
-                  <div className="absolute top-1 left-1 w-6 h-6 border-t-2 border-l-2 border-white rounded-tl-lg"></div>
-                  <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white rounded-tr-lg"></div>
-                  <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white rounded-bl-lg"></div>
-                  <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white rounded-br-lg"></div>
-                  
-                  {/* Scanning line animation */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg"></div>
-                  </div>
-                  
-                  {/* Center instruction */}
-                  {!cameraError && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm">
-                        Position barcode here
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Camera Error Fallback */}
-                {cameraError && (
-                  <div className="absolute inset-0 bg-gray-800 flex items-center justify-center rounded-2xl">
-                    <div className="text-white text-xs text-center px-3">
-                      {cameraError}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <CameraCapture
+                isActive={true}
+                onCapture={handleCameraCapture}
+                showCapturedImage={!!capturedImageData}
+                capturedImageData={capturedImageData}
+                onDeleteImage={handleDeleteImage}
+                width={256}
+                height={128}
+              />
             </div>
 
             {/* Scanned Data Display */}
@@ -220,34 +189,7 @@ export const ToteScannerPage: React.FC = () => {
               </div>
             )}
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 w-full max-w-sm">
-              <Button
-                onClick={() => handleDeleteImage(capturedImages.length - 1)}
-                disabled={capturedImages.length === 0}
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-                size="sm"
-              >
-                <Trash2 className="w-4 h-4 mr-1" />
-                Delete
-              </Button>
-              <Button
-                onClick={handleAddImage}
-                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
-                size="sm"
-              >
-                <Camera className="w-4 h-4 mr-1" />
-                Add
-              </Button>
-              <Button
-                onClick={handleToteIconClick}
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white"
-                size="sm"
-              >
-                <Camera className="w-4 h-4 mr-1" />
-                Click
-              </Button>
-            </div>
+
             
             {scannedData && (
               <div className="mt-3 text-sm text-green-600">
@@ -258,12 +200,7 @@ export const ToteScannerPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Camera Capture Modal */}
-      <CameraCapture
-        isActive={showCameraCapture}
-        onCapture={handleCameraCapture}
-        onClose={() => setShowCameraCapture(false)}
-      />
+
     </div>
   );
 };

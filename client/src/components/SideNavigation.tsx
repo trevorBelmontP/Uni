@@ -34,7 +34,11 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({
       <div
         className={`fixed top-0 left-0 h-full w-80 max-w-[90vw] bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        }
+        
+        /* Desktop responsive styles */
+        lg:static lg:translate-x-0 lg:w-64 lg:shadow-none lg:border-r lg:border-gray-200
+        `}
       >
         {/* Dark Header with user info */}
         <div className="bg-gray-800 px-4 py-4">

@@ -140,14 +140,16 @@ export const B2BPackingPage: React.FC = () => {
   }, [allPicklistItems, picklistCode, filters, sortOrder]);
 
   return (
-    <div className="bg-white min-h-screen w-full">
+    <div className="bg-white min-h-screen w-full flex">
       <SideNavigation isOpen={isSideNavOpen} onClose={handleCloseSideNav} />
-      <div className="bg-white-100 w-full max-w-md mx-auto min-h-screen relative">
+      
+      {/* Main content area with responsive padding for desktop sidebar */}
+      <div className="bg-white-100 w-full max-w-md mx-auto min-h-screen relative lg:max-w-none lg:flex-1 lg:ml-0">
         {/* Header - Same as landing page */}
         <header className="flex flex-col w-full items-start gap-4 sticky top-0 bg-transparent z-10">
           <div className="flex h-12 items-center relative self-stretch w-full bg-white-100 border-b [border-bottom-style:solid] border-[#e0e0e0]">
             <button 
-              className="relative w-12 h-12 flex items-center justify-center hover:bg-gray-100 transition-colors duration-200"
+              className="relative w-12 h-12 flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 lg:hidden"
               onClick={handleMenuClick}
             >
               <MenuIcon className="h-6 w-6 text-text-elementsprimary" />
@@ -172,7 +174,7 @@ export const B2BPackingPage: React.FC = () => {
         </header>
 
         {/* Filter Section - Below Navbar */}
-        <div className="absolute top-12 left-0 right-0 p-4 bg-white-100 border-b border-greysbordere-0e-0e-0">
+        <div className="absolute top-12 left-0 right-0 p-4 bg-white-100 border-b border-greysbordere-0e-0e-0 lg:px-8">
           <div className="flex items-center gap-3">
             {/* Filter Button */}
             <Button

@@ -81,6 +81,7 @@ export function SKUScannerPage() {
   const [inventoryType, setInventoryType] = useState("Good");
   const [showCameraCapture, setShowCameraCapture] = useState(false);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
+  const [capturedImageData, setCapturedImageData] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [cameraError, setCameraError] = useState<string>("");
@@ -219,13 +220,14 @@ export function SKUScannerPage() {
   };
 
   const handleCameraCapture = (imageData: string) => {
-    console.log("SKU photo captured");
+    setCapturedImageData(imageData);
     setCapturedImages(prev => [...prev, imageData]);
     setShowCameraCapture(false);
   };
 
-  const handleDeleteImage = (index: number) => {
-    setCapturedImages(prev => prev.filter((_, i) => i !== index));
+  const handleDeleteImage = () => {
+    setCapturedImageData(null);
+    setCapturedImages([]);
   };
 
   const handleAddImage = () => {
@@ -439,96 +441,24 @@ export function SKUScannerPage() {
                       alt={`Captured ${index + 1}`}
                       className="w-16 h-16 object-cover rounded border"
                     />
-                    <button
-                      onClick={() => handleDeleteImage(index)}
-                      className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         )}
-
-        {/* Action Buttons */}
-        <div className="flex gap-2 mb-4">
-          <Button
-            onClick={() => handleDeleteImage(capturedImages.length - 1)}
-            disabled={capturedImages.length === 0}
-            className="flex-1 bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-            size="sm"
-          >
-            <Trash2 className="w-4 h-4 mr-1" />
-            Delete
-          </Button>
-          <Button
-            onClick={handleAddImage}
-            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
-            size="sm"
-          >
-            <Camera className="w-4 h-4 mr-1" />
-            Add
-          </Button>
-          <Button
-            onClick={handleClickCapture}
-            className="flex-1 bg-green-500 hover:bg-green-600 text-white"
-            size="sm"
-          >
-            <Camera className="w-4 h-4 mr-1" />
-            Click
-          </Button>
-        </div>
         
-        {/* Live Camera Scanner */}
-        <div className="bg-gray-800 rounded-lg p-4 mb-4">
-          <div className="relative rounded-lg overflow-hidden">
-            {cameraError ? (
-              <div className="bg-gray-700 h-32 flex items-center justify-center rounded-lg">
-                <p className="text-white text-sm text-center px-4">{cameraError}</p>
-              </div>
-            ) : (
-              <div className="relative h-32 bg-black rounded-lg overflow-hidden">
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover"
-                />
-                
-                {/* Scanning Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-64 h-20 border-2 border-white border-opacity-60 rounded-lg">
-                    {/* Corner brackets */}
-                    <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-white"></div>
-                    <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-white"></div>
-                    <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-white"></div>
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-white"></div>
-                    
-                    {/* Scanning line */}
-                    {isScanning && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-full h-0.5 bg-red-500 animate-pulse"></div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Scan Button */}
-                <button
-                  onClick={simulateBarcodeScanner}
-                  disabled={isScanning}
-                  className="absolute bottom-2 right-2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 transition-all disabled:opacity-50"
-                >
-                  <div className="w-6 h-6 border-2 border-gray-800 rounded flex items-center justify-center">
-                    <div className="w-2 h-2 bg-gray-800 rounded"></div>
-                  </div>
-                </button>
-              </div>
-            )}
-          </div>
+        {/* Camera Scanner */}
+        <div className="bg-gray-800 rounded-lg p-4 mb-4 flex justify-center">
+          <CameraCapture
+            isActive={true}
+            onCapture={handleCameraCapture}
+            showCapturedImage={!!capturedImageData}
+            capturedImageData={capturedImageData}
+            onDeleteImage={handleDeleteImage}
+            width={300}
+            height={150}
+          />
         </div>
       </div>
 

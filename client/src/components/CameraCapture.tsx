@@ -1,16 +1,29 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Camera, X } from 'lucide-react';
+import { Camera, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface CameraCaptureProps {
-  onCapture: (imageData: string) => void;
+  onCapture?: (imageData: string) => void;
   onClose?: () => void;
   isActive: boolean;
+  title?: string;
+  showCapturedImage?: boolean;
+  capturedImageData?: string | null;
+  onDeleteImage?: () => void;
+  width?: number;
+  height?: number;
 }
 
 export const CameraCapture: React.FC<CameraCaptureProps> = ({
   onCapture,
   onClose,
-  isActive
+  isActive,
+  title = "Camera",
+  showCapturedImage = false,
+  capturedImageData = null,
+  onDeleteImage,
+  width = 256,
+  height = 128
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -19,7 +32,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   const [isCapturing, setIsCapturing] = useState(false);
 
   useEffect(() => {
-    if (isActive) {
+    if (isActive && !showCapturedImage) {
       startCamera();
     } else {
       stopCamera();
@@ -28,7 +41,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
     return () => {
       stopCamera();
     };
-  }, [isActive]);
+  }, [isActive, showCapturedImage]);
 
   const startCamera = async () => {
     try {
@@ -86,7 +99,9 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
     sessionStorage.setItem(storageKey, imageData);
     
     // Call the onCapture callback with the image data
-    onCapture(imageData);
+    if (onCapture) {
+      onCapture(imageData);
+    }
     
     // Reset capturing state
     setTimeout(() => setIsCapturing(false), 500);
@@ -95,77 +110,94 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   if (!isActive) return null;
 
   return (
-    <div className="fixed inset-0 bg-black z-50 flex flex-col">
-      {/* Header */}
-      <div className="flex justify-between items-center p-4 bg-black/50 text-white">
-        <h2 className="text-lg font-semibold">Camera</h2>
-        {onClose && (
-          <button 
-            onClick={onClose}
-            className="p-2 hover:bg-white/20 rounded-full"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
-      </div>
-
-      {/* Camera View */}
-      <div className="flex-1 relative flex items-center justify-center">
-        {error ? (
-          <div className="text-white text-center p-4">
-            <p className="mb-4">{error}</p>
-            <button 
-              onClick={startCamera}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Try Again
-            </button>
-          </div>
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      {/* Camera lens or captured image */}
+      <div 
+        className="relative rounded-xl overflow-hidden border-4 border-white shadow-lg"
+        style={{ width: `${width}px`, height: `${height}px` }}
+      >
+        {showCapturedImage && capturedImageData ? (
+          // Show captured image
+          <img 
+            src={capturedImageData}
+            alt="Captured"
+            className="w-full h-full object-cover"
+          />
         ) : (
+          // Show camera feed or error
           <>
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover"
-              playsInline
-              muted
-            />
-            
-            {/* Scanning overlay */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-64 h-32 border-2 border-white rounded-lg bg-transparent relative">
-                <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-blue-400"></div>
-                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-blue-400"></div>
-                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-blue-400"></div>
-                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-blue-400"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-full h-0.5 bg-red-500 opacity-70 animate-pulse"></div>
+            {error ? (
+              <div className="w-full h-full bg-gray-800 flex items-center justify-center text-white text-xs p-2 text-center">
+                <div>
+                  <p className="mb-2">{error}</p>
+                  <button 
+                    onClick={startCamera}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                  >
+                    Retry
+                  </button>
                 </div>
               </div>
+            ) : (
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover"
+              />
+            )}
+            
+            {/* Scanning overlay */}
+            <div className="absolute inset-0 border-2 border-dashed border-white/50 flex items-center justify-center">
+              {isCapturing && (
+                <div className="bg-white/20 rounded-full p-2">
+                  <Camera className="w-4 h-4 text-white animate-pulse" />
+                </div>
+              )}
             </div>
           </>
         )}
       </div>
 
-      {/* Capture Button */}
-      <div className="p-6 bg-black/50 flex justify-center">
-        <button
-          onClick={capturePhoto}
-          disabled={!!error || isCapturing}
-          className={`w-16 h-16 rounded-full border-4 border-white flex items-center justify-center ${
-            isCapturing 
-              ? 'bg-green-500 border-green-500' 
-              : 'bg-white hover:bg-gray-100'
-          } transition-all duration-300 disabled:opacity-50`}
-        >
-          {isCapturing ? (
-            <div className="w-8 h-8 bg-white rounded-full"></div>
-          ) : (
-            <Camera className="w-8 h-8 text-black" />
-          )}
-        </button>
+      {/* Action buttons */}
+      <div className="flex gap-2 mt-4">
+        {showCapturedImage && capturedImageData ? (
+          <>
+            <Button
+              onClick={onDeleteImage}
+              variant="destructive"
+              size="sm"
+              className="flex items-center gap-1"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete
+            </Button>
+            <Button
+              onClick={() => {
+                if (onDeleteImage) onDeleteImage();
+                startCamera();
+              }}
+              variant="outline"
+              size="sm"
+            >
+              Add
+            </Button>
+          </>
+        ) : (
+          <Button
+            onClick={capturePhoto}
+            disabled={isCapturing || !!error}
+            className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
+            size="sm"
+          >
+            <Camera className="w-4 h-4" />
+            {isCapturing ? "Capturing..." : "Click Picture"}
+          </Button>
+        )}
       </div>
 
-      {/* Hidden canvas for photo capture */}
+      {/* Hidden canvas for image processing */}
       <canvas ref={canvasRef} className="hidden" />
     </div>
   );
