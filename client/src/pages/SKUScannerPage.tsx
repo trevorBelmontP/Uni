@@ -235,7 +235,19 @@ export function SKUScannerPage() {
   };
 
   const handleClickCapture = () => {
-    setShowCameraCapture(true);
+    // Capture photo directly from video stream
+    if (videoRef.current && !capturedImageData) {
+      const canvas = document.createElement('canvas');
+      const video = videoRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0);
+        const imageData = canvas.toDataURL('image/jpeg', 0.8);
+        handleCameraCapture(imageData);
+      }
+    }
   };
 
 
@@ -423,7 +435,12 @@ export function SKUScannerPage() {
       <div className="bg-black text-white p-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-medium">Scan SKU Code</h2>
-          <Trash2 className="w-5 h-5 text-gray-400" />
+          <button
+            onClick={handleDeleteImage}
+            className="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+          >
+            <Trash2 className="w-4 h-4 text-gray-600" />
+          </button>
         </div>
 
         {/* Captured Images */}
@@ -449,16 +466,71 @@ export function SKUScannerPage() {
         )}
         
         {/* Camera Scanner */}
-        <div className="bg-gray-800 rounded-lg p-4 mb-4 flex justify-center">
-          <CameraCapture
-            isActive={true}
-            onCapture={handleCameraCapture}
-            showCapturedImage={!!capturedImageData}
-            capturedImageData={capturedImageData}
-            onDeleteImage={handleDeleteImage}
-            width={300}
-            height={150}
-          />
+        <div className="bg-gray-800 rounded-lg p-4 mb-4">
+          <div className="flex flex-col items-center">
+            {/* Camera Lens with captured image overlay */}
+            <div className="relative w-80 h-40 rounded-lg overflow-hidden mb-4">
+              {!capturedImageData ? (
+                <>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Scanning Frame Overlay */}
+                  <div className="absolute inset-0 border-2 border-white border-opacity-60 rounded-lg">
+                    {/* Corner brackets */}
+                    <div className="absolute top-1 left-1 w-6 h-6 border-t-2 border-l-2 border-white"></div>
+                    <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white"></div>
+                    <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white"></div>
+                    <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white"></div>
+                    
+                    {/* Scanning line animation */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg"></div>
+                    </div>
+                    
+                    {/* Center instruction */}
+                    {!cameraError && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm">
+                          Position SKU barcode here
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <img
+                  src={capturedImageData}
+                  alt="Captured"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              )}
+              
+              {/* Camera Error Fallback */}
+              {cameraError && !capturedImageData && (
+                <div className="absolute inset-0 bg-gray-700 flex items-center justify-center rounded-lg">
+                  <div className="text-white text-xs text-center px-3">
+                    {cameraError}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Click Picture Button */}
+            {!capturedImageData && (
+              <Button
+                onClick={handleClickCapture}
+                className="bg-white text-black hover:bg-gray-100 border border-gray-300 px-6 py-2 rounded-full font-medium"
+              >
+                <Camera className="w-4 h-4 mr-2" />
+                Click Picture
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 

@@ -63,7 +63,19 @@ export const ToteScannerPage: React.FC = () => {
   };
 
   const handleToteIconClick = () => {
-    setShowCameraCapture(true);
+    // Capture photo directly from video stream
+    if (videoRef.current && !capturedImageData) {
+      const canvas = document.createElement('canvas');
+      const video = videoRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0);
+        const imageData = canvas.toDataURL('image/jpeg', 0.8);
+        handleCameraCapture(imageData);
+      }
+    }
   };
 
   const handleCameraCapture = (imageData: string) => {
@@ -127,22 +139,76 @@ export const ToteScannerPage: React.FC = () => {
               <h2 className="text-white text-lg font-medium">Scan SHELF</h2>
               <button 
                 className="absolute right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-                onClick={handleToteIconClick}
+                onClick={handleDeleteImage}
               >
+                <Trash2 className="h-4 w-4 text-gray-600" />
               </button>
             </div>
 
             {/* Camera Scanner Area */}
-            <div className="relative flex items-center justify-center">
-              <CameraCapture
-                isActive={true}
-                onCapture={handleCameraCapture}
-                showCapturedImage={!!capturedImageData}
-                capturedImageData={capturedImageData}
-                onDeleteImage={handleDeleteImage}
-                width={256}
-                height={128}
-              />
+            <div className="relative flex flex-col items-center justify-center">
+              {/* Camera Lens with captured image overlay */}
+              <div className="relative w-64 h-32 rounded-2xl overflow-hidden mb-4">
+                {!capturedImageData ? (
+                  <>
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      muted
+                      className="w-full h-full object-cover"
+                    />
+                    {/* Scanning Frame Overlay */}
+                    <div className="absolute inset-0 border-2 border-white border-opacity-60 rounded-2xl">
+                      {/* Corner brackets */}
+                      <div className="absolute top-1 left-1 w-6 h-6 border-t-2 border-l-2 border-white rounded-tl-lg"></div>
+                      <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white rounded-tr-lg"></div>
+                      <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white rounded-bl-lg"></div>
+                      <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white rounded-br-lg"></div>
+                      
+                      {/* Scanning line animation */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg"></div>
+                      </div>
+                      
+                      {/* Center instruction */}
+                      {!cameraError && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm">
+                            Position barcode here
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <img
+                    src={capturedImageData}
+                    alt="Captured"
+                    className="w-full h-full object-cover rounded-2xl"
+                  />
+                )}
+                
+                {/* Camera Error Fallback */}
+                {cameraError && !capturedImageData && (
+                  <div className="absolute inset-0 bg-gray-800 flex items-center justify-center rounded-2xl">
+                    <div className="text-white text-xs text-center px-3">
+                      {cameraError}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Click Picture Button */}
+              {!capturedImageData && (
+                <Button
+                  onClick={handleToteIconClick}
+                  className="bg-white text-black hover:bg-gray-100 border border-gray-300 px-6 py-2 rounded-full font-medium"
+                >
+                  <Camera className="w-4 h-4 mr-2" />
+                  Click Picture
+                </Button>
+              )}
             </div>
 
             {/* Scanned Data Display */}
@@ -161,33 +227,7 @@ export const ToteScannerPage: React.FC = () => {
               Scan tote to continue picking
             </p>
             
-            {/* Captured Images */}
-            {capturedImages.length > 0 && (
-              <div className="mb-4 w-full max-w-sm">
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-sm font-medium">Captured Images ({capturedImages.length})</h3>
-                  </div>
-                  <div className="flex gap-2 overflow-x-auto">
-                    {capturedImages.map((image, index) => (
-                      <div key={index} className="relative flex-shrink-0">
-                        <img 
-                          src={image} 
-                          alt={`Captured ${index + 1}`}
-                          className="w-16 h-16 object-cover rounded border"
-                        />
-                        <button
-                          onClick={() => handleDeleteImage(index)}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+
 
 
             

@@ -84,6 +84,9 @@ This is a mobile-first picking application migrated from Figma to Replit. The ap
 - **2025-01-29**: Fixed responsive design - navigation sidebar expands properly on desktop screens and hamburger menu hidden on large screens
 - **2025-01-29**: Implemented clean camera functionality with click picture buttons on all scanner pages
 - **2025-01-29**: Enhanced CameraCapture component with delete/add functionality and proper image display over camera lens
+- **2025-01-29**: Implemented clean camera interface - removed Delete/Add/Click buttons, added single "Click Picture" button below lens
+- **2025-01-29**: Added bin button functionality in header to clear captured photos and restore camera view
+- **2025-01-29**: Updated all scanner pages with direct photo capture from video stream without modal dialogs
 
 ## User Preferences
 - Mobile-first design approach

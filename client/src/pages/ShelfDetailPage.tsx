@@ -34,6 +34,7 @@ export const ShelfDetailPage: React.FC = () => {
   const [showBarcodeData, setShowBarcodeData] = useState(false);
   const [showCameraCapture, setShowCameraCapture] = useState(false);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
+  const [capturedImageData, setCapturedImageData] = useState<string | null>(null);
 
   // Start camera when component mounts
   useEffect(() => {
@@ -82,13 +83,25 @@ export const ShelfDetailPage: React.FC = () => {
   };
 
   const handleScanShelf = () => {
-    setShowCameraCapture(true);
+    // Capture photo directly from video stream
+    if (videoRef.current && !capturedImageData) {
+      const canvas = document.createElement('canvas');
+      const video = videoRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0);
+        const imageData = canvas.toDataURL('image/jpeg', 0.8);
+        handleCameraCapture(imageData);
+      }
+    }
   };
 
   const handleCameraCapture = (imageData: string) => {
     console.log("Shelf photo captured");
+    setCapturedImageData(imageData);
     setCapturedImages(prev => [...prev, imageData]);
-    setShowCameraCapture(false);
     setShowBarcodeData(true);
   };
 
@@ -155,49 +168,62 @@ export const ShelfDetailPage: React.FC = () => {
             <h2 className="text-white text-lg font-medium">Scan SHELF</h2>
             <button 
               className="absolute right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-              onClick={handleScanShelf}
+              onClick={() => {
+                setCapturedImageData(null);
+                setCapturedImages([]);
+                setShowBarcodeData(false);
+              }}
             >
               <Trash2 className="h-4 w-4 text-gray-600" />
             </button>
           </div>
 
-          {/* Camera Viewfinder */}
-          <div className="relative flex items-center justify-center">
-            {/* Camera Video Stream */}
-            <div className="relative w-64 h-32 rounded-2xl overflow-hidden">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-full object-cover"
-              />
-              
-              {/* Scanning Frame Overlay */}
-              <div className="absolute inset-0 border-2 border-white border-opacity-60 rounded-2xl">
-                {/* Corner brackets */}
-                <div className="absolute top-1 left-1 w-6 h-6 border-t-2 border-l-2 border-white rounded-tl-lg"></div>
-                <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white rounded-tr-lg"></div>
-                <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white rounded-bl-lg"></div>
-                <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white rounded-br-lg"></div>
-                
-                {/* Scanning line animation */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg"></div>
-                </div>
-                
-                {/* Center instruction */}
-                {!cameraError && !showBarcodeData && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm">
-                      Position shelf barcode here
+          {/* Camera Scanner Area */}
+          <div className="relative flex flex-col items-center justify-center">
+            {/* Camera Lens with captured image overlay */}
+            <div className="relative w-64 h-32 rounded-2xl overflow-hidden mb-4">
+              {!capturedImageData ? (
+                <>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Scanning Frame Overlay */}
+                  <div className="absolute inset-0 border-2 border-white border-opacity-60 rounded-2xl">
+                    {/* Corner brackets */}
+                    <div className="absolute top-1 left-1 w-6 h-6 border-t-2 border-l-2 border-white rounded-tl-lg"></div>
+                    <div className="absolute top-1 right-1 w-6 h-6 border-t-2 border-r-2 border-white rounded-tr-lg"></div>
+                    <div className="absolute bottom-1 left-1 w-6 h-6 border-b-2 border-l-2 border-white rounded-bl-lg"></div>
+                    <div className="absolute bottom-1 right-1 w-6 h-6 border-b-2 border-r-2 border-white rounded-br-lg"></div>
+                    
+                    {/* Scanning line animation */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-4/5 h-0.5 bg-red-500 animate-pulse shadow-lg"></div>
                     </div>
+                    
+                    {/* Center instruction */}
+                    {!cameraError && !showBarcodeData && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm">
+                          Position shelf barcode here
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </>
+              ) : (
+                <img
+                  src={capturedImageData}
+                  alt="Captured"
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              )}
               
               {/* Camera Error Fallback */}
-              {cameraError && (
+              {cameraError && !capturedImageData && (
                 <div className="absolute inset-0 bg-gray-800 flex items-center justify-center rounded-2xl">
                   <div className="text-white text-xs text-center px-3">
                     {cameraError}
@@ -205,6 +231,17 @@ export const ShelfDetailPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Click Picture Button */}
+            {!capturedImageData && (
+              <Button
+                onClick={handleScanShelf}
+                className="bg-white text-black hover:bg-gray-100 border border-gray-300 px-6 py-2 rounded-full font-medium"
+              >
+                <Camera className="w-4 h-4 mr-2" />
+                Click Picture
+              </Button>
+            )}
           </div>
 
           {/* Barcode Data Display (shows after scanning) */}
