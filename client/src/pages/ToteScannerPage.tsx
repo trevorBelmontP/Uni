@@ -125,6 +125,8 @@ export const ToteScannerPage: React.FC = () => {
   const handleDeleteImage = () => {
     setCapturedImageData(null);
     setCapturedImages([]);
+    // Restart camera when image is deleted
+    startCamera();
   };
 
   const handleAddImage = () => {
@@ -157,13 +159,13 @@ export const ToteScannerPage: React.FC = () => {
           </Button>
         </header>
 
-        {/* Content */}
-        <div className="flex flex-col h-[60%]">
-          {/* Scan SHELF Section - Camera View */}
-          <div className="bg-red-700 flex flex-col items-center justify-center relative flex-1 rounded-xl">
-            {/* Scan SHELF Title */}
+        {/* Main Content - Full Height */}
+        <div className="flex-1 flex flex-col">
+          {/* Scan TOTE Section - Camera View */}
+          <div className="bg-gray-800 flex flex-col items-center justify-center relative flex-1">
+            {/* Scan TOTE Title */}
             <div className="absolute top-6 left-0 right-0 flex items-center justify-center">
-              <h2 className="text-white text-lg font-medium">Scan SHELF</h2>
+              <h2 className="text-white text-lg font-medium">Scan TOTE</h2>
               <button 
                 className="absolute right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
                 onClick={handleDeleteImage}
@@ -202,7 +204,7 @@ export const ToteScannerPage: React.FC = () => {
                       {!cameraError && (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="text-white text-xs text-center bg-black bg-opacity-70 px-3 py-1 rounded-full backdrop-blur-sm">
-                            Position barcode here
+                            Position tote barcode here
                           </div>
                         </div>
                       )}

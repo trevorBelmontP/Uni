@@ -251,6 +251,8 @@ export function SKUScannerPage() {
   const handleDeleteImage = () => {
     setCapturedImageData(null);
     setCapturedImages([]);
+    // Restart camera when image is deleted
+    startCamera();
   };
 
   const handleAddImage = () => {
@@ -466,27 +468,7 @@ export function SKUScannerPage() {
           </button>
         </div>
 
-        {/* Captured Images */}
-        {capturedImages.length > 0 && (
-          <div className="mb-4">
-            <div className="bg-gray-800 p-3 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-sm font-medium text-white">Captured Images ({capturedImages.length})</h3>
-              </div>
-              <div className="flex gap-2 overflow-x-auto">
-                {capturedImages.map((image, index) => (
-                  <div key={index} className="relative flex-shrink-0">
-                    <img 
-                      src={image} 
-                      alt={`Captured ${index + 1}`}
-                      className="w-16 h-16 object-cover rounded border"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+
         
         {/* Camera Scanner */}
         <div className="bg-gray-800 rounded-lg p-4 mb-4">

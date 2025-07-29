@@ -172,6 +172,8 @@ export const ShelfDetailPage: React.FC = () => {
                 setCapturedImageData(null);
                 setCapturedImages([]);
                 setShowBarcodeData(false);
+                // Restart camera when image is deleted
+                startCamera();
               }}
             >
               <Trash2 className="h-4 w-4 text-gray-600" />

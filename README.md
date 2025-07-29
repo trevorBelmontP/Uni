@@ -88,14 +88,15 @@ The app uses **Wouter** for navigation. Here's how pages connect:
 
 ## 🧩 Key Components Explained
 
-### 1. CameraCapture.tsx
-**What it does**: Handles all camera functionality for barcode scanning
+### 1. Camera Interface (All Scanner Pages)
+**What it does**: Clean, unified camera functionality across all scanner pages
 **Features**:
-- Opens device camera
-- Shows live video feed
-- Captures photos when button clicked
-- Displays captured image over camera lens
-- Handles camera permissions and errors
+- Opens device camera with live video feed
+- Shows scanning overlay with corner brackets and animated line
+- Single "Click Picture" button below lens (no modal popups)  
+- Captured images display perfectly fitted inside camera lens
+- Bin button in header removes photos and restores camera view
+- No extra image galleries or unnecessary UI elements
 
 ### 2. SideNavigation.tsx
 **What it does**: Provides the hamburger menu and navigation
@@ -115,27 +116,32 @@ The app uses **Wouter** for navigation. Here's how pages connect:
 ### 4. ToteScannerPage.tsx
 **What it does**: First scanning step - scan the container/tote
 **Features**:
-- Camera interface with scanning overlay
-- Direct photo capture
-- Bin button to clear photos
-- Navigation to next step
+- Full-height camera interface with proper page alignment
+- Clean camera lens with no popups or extra sections
+- Direct photo capture that stays inside lens
+- Bin button restarts camera when clicked
+- Automatic navigation to shelf detail after scanning
 
 ### 5. ShelfDetailPage.tsx
 **What it does**: Shows shelf information and allows shelf scanning
 **Features**:
-- Displays shelf codes and quantities
-- Camera scanning for shelf verification
-- Sort shelves alphabetically
-- Navigate to product scanning
+- Displays shelf codes and quantities in organized list
+- Clean camera interface with no custom popups
+- Photos fit perfectly inside camera lens
+- Bin button clears photos and restarts camera
+- Sort shelves alphabetically (A-Z/Z-A)
+- Navigate to product scanning after verification
 
 ### 6. SKUScannerPage.tsx
 **What it does**: Final step - scan and pick individual products
 **Features**:
+- Clean camera interface with no extra image sections
+- Photos display inside camera lens only
 - Tabbed interface (Pending/Scanned items)
-- Product cards with details
-- Bulk picking modal
-- Quantity management
-- Status tracking (Good/Damaged)
+- Product cards with detailed information
+- Bulk picking modal for quantity selection
+- Real-time status tracking (Good/Damaged)
+- Bin button functionality for clearing photos
 
 ## 🎨 Styling System
 
@@ -175,10 +181,11 @@ This starts both frontend and backend on port 5000.
 ## 📱 Mobile Features
 
 ### Camera Integration
-- **Live Video Feed**: Shows real-time camera view
-- **Barcode Scanning**: Visual guides for positioning barcodes
-- **Photo Capture**: Click button to capture images
-- **Image Management**: Bin button to clear captured photos
+- **Live Video Feed**: Shows real-time camera view with scanning overlay
+- **Barcode Scanning**: Visual guides with corner brackets and scanning line
+- **Clean Photo Capture**: Single "Click Picture" button below camera lens
+- **Image Display**: Captured photos overlay perfectly inside the camera lens
+- **Simple Management**: Bin button in header clears photos and restores camera view
 
 ### Responsive Design
 - **Mobile-First**: Optimized for 412px width (standard phone)
