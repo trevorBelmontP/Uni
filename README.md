@@ -133,7 +133,7 @@ The app uses **Wouter** for navigation. Here's how pages connect:
 - Navigate to product scanning after verification
 
 ### 6. SKUScannerPage.tsx
-**What it does**: Final step - scan and pick individual products
+**What it does**: Final step - scan and pick individual products (camera mode)
 **Features**:
 - Clean camera interface with no extra image sections
 - Photos display inside camera lens only
@@ -142,6 +142,24 @@ The app uses **Wouter** for navigation. Here's how pages connect:
 - Bulk picking modal for quantity selection
 - Real-time status tracking (Good/Damaged)
 - Bin button functionality for clearing photos
+
+### 7. ShelfSelectionPage.tsx (NEW)
+**What it does**: Alternative shelf selection when barcode mode is OFF
+**Features**:
+- Input box for scanning shelf codes instead of camera
+- Displays available shelves with SKU counts and quantities
+- Search and filter functionality for shelf codes
+- A-Z/Z-A sorting options
+- Tabbed interface (Pending/Scanned shelves)
+
+### 8. SKUInputPage.tsx (NEW)
+**What it does**: Alternative SKU input when barcode mode is OFF
+**Features**:
+- Input box for entering SKU codes instead of camera scanning
+- Same product card layout as camera mode
+- Pick/unpick functionality via buttons and clicks
+- Real-time inventory management
+- Tabbed interface (Pending/Scanned items)
 
 ## 🎨 Styling System
 

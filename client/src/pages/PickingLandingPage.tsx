@@ -4,11 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SideNavigation } from "@/components/SideNavigation";
 import { useLocation } from "wouter";
+import { useBarcodeMode } from "@/contexts/BarcodeModeContext";
 
 export const PickingLandingPage = (): JSX.Element => {
   // State for sidebar navigation
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [, setLocation] = useLocation();
+  
+  // Get barcode mode from context
+  const { isBarcodeMode } = useBarcodeMode();
 
   const handleMenuClick = () => {
     setIsSideNavOpen(true);

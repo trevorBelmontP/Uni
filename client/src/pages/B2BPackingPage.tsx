@@ -32,6 +32,7 @@ import { Input } from "@/components/ui/input"; // Text input component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Dropdown components
 import { useLocation } from "wouter"; // For navigation between pages
 import { SideNavigation } from "@/components/SideNavigation"; // Navigation menu component
+import { useBarcodeMode } from "@/contexts/BarcodeModeContext"; // Global barcode mode state
 
 interface PicklistItem {
   id: string;
@@ -59,6 +60,9 @@ interface FilterState {
 export const B2BPackingPage: React.FC = () => {
   const [, setLocation] = useLocation();
   const [assignToMe, setAssignToMe] = useState(false);
+  
+  // Get barcode mode from context
+  const { isBarcodeMode } = useBarcodeMode();
   const [picklistCode, setPicklistCode] = useState("");
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
