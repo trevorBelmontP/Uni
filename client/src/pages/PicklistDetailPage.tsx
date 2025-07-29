@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { useLocation, useParams } from "wouter";
 import { SideNavigation } from "@/components/SideNavigation";
+import { BarcodeModeProvider, useBarcodeMode } from "@/contexts/BarcodeModeContext";
 
 interface ShelfItem {
   id: string;
@@ -35,6 +36,7 @@ export const PicklistDetailPage: React.FC = () => {
   const [isSectionDialogOpen, setIsSectionDialogOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string>("Section A");
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+  const { isBarcodeMode } = useBarcodeMode(); 
 
   // Sample shelf data
   const pendingShelves: ShelfItem[] = [
@@ -71,11 +73,14 @@ export const PicklistDetailPage: React.FC = () => {
 
   const handleStartPicking = () => {
     console.log("Start picking clicked");
-    setLocation(`/tote-scanner/${picklistId}`);
+    if(isBarcodeMode)setLocation(`/tote-scanner/${picklistId}`);
+    else{
+      setLocation(`/shelf-selection/${picklistId}`);
+    }
   };
 
   const handleMoreOptions = () => {
-    console.log("More options clicked");
+    console.log("More option  s clicked");
   };
 
   const handleSortToggle = () => {
@@ -282,3 +287,7 @@ export const PicklistDetailPage: React.FC = () => {
     </div>
   );
 };
+function isBarcodeMode(): { isBarcodeMode: any; } {
+    throw new Error("Function not implemented.");
+}
+
